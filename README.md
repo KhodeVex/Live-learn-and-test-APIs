@@ -77,7 +77,7 @@ http://localhost:8000
 After deployment, replace this with your live demo URL:
 
 ```text
-https://your-username.github.io/apilearn/
+https://khodevex.github.io/Live-learn-and-test-APIs/
 ```
 
 ## 📁 Project Structure
@@ -151,8 +151,7 @@ This project is released under the MIT License.
 
 ## 👤 Author
 
-Created by **Your Name**
+Created by **KhodeVex**
 
-- GitHub: `https://github.com/your-username`
-- LinkedIn: `https://linkedin.com/in/your-profile`
-- Portfolio: `https://your-portfolio.com`
+- GitHub: `https://github.com/khodevex`
+- Portfolio: `https://khodevex.pages.dev/`
