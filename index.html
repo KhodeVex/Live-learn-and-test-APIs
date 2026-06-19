@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APILearn — Master APIs 0→100%</title>
+<meta name="description" content="APILearn is an interactive REST API learning playground with lessons, a live HTTP tester, docs, examples, and request logs.">
+<meta name="theme-color" content="#0d1117">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">API<span>Learn</span></div>
+  <nav aria-label="Primary navigation">
+    <button class="active" id="nav-learn" onclick="showSection('learn')">📚 Learn</button>
+    <button id="nav-tester" onclick="showSection('tester')">🧪 Live Tester</button>
+    <button id="nav-docs" onclick="showSection('docs')">📖 Docs</button>
+  </nav>
+  <div class="prog-wrap">
+    <span id="prog-text">0 / 12</span>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <span id="prog-pct">0%</span>
+  </div>
+</header>
+
+<div class="main-layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-section" id="sidebar-inner">
+      <div class="sidebar-title">Learning Path</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content" id="main-content">
+
+    <!-- LEARN -->
+    <div class="section active" id="section-learn">
+      <div id="chapter-content"></div>
+    </div>
+
+    <!-- TESTER -->
+    <div class="section" id="section-tester">
+      <div class="page-title">🧪 Live API Tester</div>
+      <div class="page-sub">Build and fire HTTP requests. Responses appear below and in the log panel.</div>
+      <div class="tester-grid">
+        <div class="tester-col">
+          <div class="req-bar">
+            <select class="method-sel" id="req-method" aria-label="HTTP method" onchange="updateMethodColor()">
+              <option>GET</option><option>POST</option><option>PUT</option>
+              <option>PATCH</option><option>DELETE</option><option>HEAD</option><option>OPTIONS</option>
+            </select>
+            <input class="url-inp" id="req-url" aria-label="Request URL" placeholder="https://jsonplaceholder.typicode.com/posts/1" onkeydown="if(event.key==='Enter')sendRequest()">
+            <button class="send-btn" id="send-btn" aria-label="Send request" onclick="sendRequest()">Send ▶</button>
+          </div>
+
+          <div>
+            <div class="tabs">
+              <button class="tab-btn active" onclick="switchTab('params',this)">Params</button>
+              <button class="tab-btn" onclick="switchTab('headers',this)">Headers</button>
+              <button class="tab-btn" onclick="switchTab('body',this)">Body</button>
+              <button class="tab-btn" onclick="switchTab('auth',this)">Auth</button>
+            </div>
+            <div class="tab-pane active" id="tab-params">
+              <div class="kv-editor" id="params-ed"></div>
+              <button class="add-row" onclick="addKV('params-ed','key','value')">+ Add Param</button>
+            </div>
+            <div class="tab-pane" id="tab-headers">
+              <div class="kv-editor" id="headers-ed"></div>
+              <button class="add-row" onclick="addKV('headers-ed','Header-Name','value')">+ Add Header</button>
+            </div>
+            <div class="tab-pane" id="tab-body">
+              <textarea class="body-ta" id="req-body" aria-label="Request body" placeholder='{"key": "value"}'></textarea>
+            </div>
+            <div class="tab-pane" id="tab-auth">
+              <div class="field-lbl">Auth Type</div>
+              <select class="auth-sel" id="auth-type" onchange="renderAuthFields()">
+                <option value="none">No Auth</option>
+                <option value="bearer">Bearer Token</option>
+                <option value="apikey">API Key Header</option>
+                <option value="basic">Basic Auth</option>
+              </select>
+              <div id="auth-fields"></div>
+            </div>
+          </div>
+
+          <div class="res-panel" id="res-panel">
+            <div class="res-ph" id="res-ph">
+              <div style="font-size:36px;margin-bottom:10px">📡</div>
+              <div>Send a request to see the response here</div>
+            </div>
+            <div id="res-content" style="display:none">
+              <div class="res-header">
+                <span class="s-badge" id="res-badge">—</span>
+                <span class="res-meta" id="res-time"></span>
+                <span class="res-meta" id="res-size"></span>
+                <div style="flex:1"></div>
+                <button class="btn btn-s" style="padding:4px 10px;font-size:12px" onclick="copyRes()">Copy</button>
+              </div>
+              <div class="tabs" style="padding:0 16px;background:var(--surface2);border-bottom:1px solid var(--border)">
+                <button class="tab-btn active" id="rt-body-btn" onclick="switchResTab('body')">Body</button>
+                <button class="tab-btn" id="rt-hdrs-btn" onclick="switchResTab('hdrs')">Headers</button>
+              </div>
+              <div class="res-body" id="rt-body"></div>
+              <div class="res-body" id="rt-hdrs" style="display:none"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXAMPLES SIDEBAR -->
+        <div>
+          <div class="ex-panel">
+            <div class="ex-title">Quick Examples</div>
+            <div id="ex-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOCS -->
+    <div class="section" id="section-docs">
+      <div class="page-title">📖 API Reference & Docs</div>
+      <div class="page-sub">Learning paths, public APIs to practice, and quick-reference cheatsheets.</div>
+      <input class="search-inp" aria-label="Search documentation" type="text" placeholder="🔍 Search docs..." oninput="renderDocs(this.value)" id="doc-search">
+      <div id="docs-body"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- LOG PANEL -->
+<div class="log-panel" id="log-panel">
+  <div class="log-hdr" onclick="toggleLog()">
+    <span style="font-size:14px">📋</span>
+    <span class="log-title">Request Log</span>
+    <span class="log-badge" id="log-count">0</span>
+    <div class="log-ctrls" onclick="event.stopPropagation()">
+      <button class="log-btn" onclick="clearLogs()">Clear</button>
+    </div>
+    <span id="log-chevron">▼</span>
+  </div>
+  <div class="log-entries" id="log-entries">
+    <div style="padding:18px;text-align:center;color:var(--text-muted);font-size:12px">No requests yet — send one from the tester or click a quick example.</div>
+  </div>
+</div>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
