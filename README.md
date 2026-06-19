@@ -45,8 +45,8 @@ No installation is required.
 ### Open directly
 
 ```bash
-git clone https://github.com/your-username/apilearn.git
-cd apilearn
+git clone https://github.com/KhodeVex/Live-learn-and-test-APIs.git
+cd Live-learn-and-test-APIs
 open index.html
 ```
 
@@ -74,7 +74,7 @@ http://localhost:8000
 4. Choose the `main` branch and root folder.
 5. Save and open the generated GitHub Pages URL.
 
-After deployment, replace this with your live demo URL:
+## 🔗 Live Demo
 
 ```text
 https://khodevex.github.io/Live-learn-and-test-APIs/
